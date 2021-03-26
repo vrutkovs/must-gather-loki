@@ -14,5 +14,16 @@ scrape_configs:
   - targets:
       - localhost
     labels:
-      job: varlogs
+      job: must-gather
       __path__: /logs/**/current.log
+  pipeline_stages:
+    - match:
+        selector: '{job="must-gather"}'
+        stages:
+        - regex:
+            source: filename
+            expression: "/logs/.+/namespaces/(?P<namespace>.+?)/pods/(?P<pod>.+?)/(?P<container>.+?).*"
+        - labels:
+            namespace:
+            pod:
+            container:
