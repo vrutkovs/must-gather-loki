@@ -22,7 +22,7 @@ scrape_configs:
         stages:
         - regex:
             source: filename
-            expression: "/logs/.+/namespaces/(?P<namespace>.+?)/pods/(?P<pod>.+?)/(?P<container>.+?).*"
+            expression: "/logs/.+/namespaces/(?P<namespace>.+?)/pods/(?P<pod>.+?)/(?P<container>.+?)/.*"
         - labels:
             namespace:
             pod:
