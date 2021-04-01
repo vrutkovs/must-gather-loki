@@ -23,14 +23,17 @@ podman run -d \
 podman run -d \
   --pod must-gather \
   --name grafana \
+  -e GF_AUTH_ANONYMOUS_ENABLED=true \
+  -e GF_AUTH_ANONYMOUS_ORG_ROLE=Editor \
+  -v $(pwd)/grafana/datasources:/etc/grafana/provisioning/datasources \
   -ti docker.io/grafana/grafana:7.5.0
 
 # Start promtail
 podman run -d \
   --pod must-gather \
   --name promtail \
-  -v $(pwd):/etc/promtail \
+  -v $(pwd)/promtail:/etc/promtail \
   -v "$1":"/logs" \
   -ti docker.io/grafana/promtail:2.2.0
 
-echo "Grafana started at http://localhost:3000"
+echo "Grafana started at http://localhost:3000/explore"
