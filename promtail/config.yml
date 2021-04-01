@@ -14,11 +14,11 @@ scrape_configs:
   - targets:
       - localhost
     labels:
-      job: must-gather
+      job: container-logs
       __path__: /logs/**/current.log
   pipeline_stages:
     - match:
-        selector: '{job="must-gather"}'
+        selector: '{job="container-logs"}'
         stages:
         - regex:
             source: filename
