@@ -8,7 +8,7 @@ if [ -z "$1" ]
 fi
 
 # Create a pod
-podman pod stop must-gather && podman pod rm must-gather || true
+podman pod rm -f must-gather || true
 podman pod create --name must-gather -p 3000:3000
 
 # Start Loki container
@@ -37,3 +37,4 @@ podman run -d \
   -ti docker.io/grafana/promtail:2.2.0
 
 echo "Grafana started at http://localhost:3000/explore"
+echo "Run `podman pod rm -f must-gather` to stop all containers"
