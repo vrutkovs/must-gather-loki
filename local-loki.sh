@@ -7,23 +7,30 @@ if [ -z "$1" ]
     exit 1
 fi
 
+# Create a pod
+podman pod stop must-gather && podman pod rm must-gather || true
+podman pod create --name must-gather -p 3000:3000
+
 # Start Loki container
-docker rm -f loki || true
-docker run -d --name=loki \
+# podman rm -f loki || true
+podman run -d \
+  --pod must-gather \
+  --name loki \
   -u 0 \
-  -p 3100:3100 \
   -ti docker.io/grafana/loki:2.2.0
 
 # Start Grafana
-docker rm -f grafana || true
-docker run -d --name=grafana \
-  -p 3000:3000 \
+podman run -d \
+  --pod must-gather \
+  --name grafana \
   -ti docker.io/grafana/grafana:7.5.0
 
-echo "Grafana started at http://localhost:3000"
-
-docker rm -f promtail || true
-docker run -d --name=promtail \
+# Start promtail
+podman run -d \
+  --pod must-gather \
+  --name promtail \
   -v $(pwd):/etc/promtail \
   -v "$1":"/logs" \
   -ti docker.io/grafana/promtail:2.2.0
+
+echo "Grafana started at http://localhost:3000"
