@@ -44,6 +44,7 @@ limits_config:
   ingestion_burst_size_mb: 1024
   max_query_series: 100000
   max_query_parallelism: 2
+  max_global_streams_per_user: 0
   per_stream_rate_limit: 35GB
   per_stream_rate_limit_burst: 90GB
 # By default, Loki will send anonymous, but uniquely-identifiable usage and configuration
