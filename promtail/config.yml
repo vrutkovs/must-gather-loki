@@ -22,7 +22,15 @@ scrape_configs:
         stages:
         - regex:
             source: filename
-            expression: "/logs/.+/namespaces/(?P<namespace>.+?)/pods/(?P<pod>.+?)/(?P<container>.+?)/.*"
+            expression: "/logs/.+/namespaces/(?P<namespace>.+?)/pods/(?P<pod>.+?)/(?P<container>.+?)/(?P<container2>.+?)/logs/.*"
+        - cri: {}
+        - regex:
+            expression: "^(?s)(?P<time>\\S+?) (?P<message>.*)$"
+        - timestamp:
+            source: time
+            format: RFC3339Nano
+        - output:
+            source: message
         - labels:
             namespace:
             pod:
